@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "server.js",
   "dependencies": {
-    "restify": "^4.3.0",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "mongojs": "^2.4.0",
     "rxjs": "^5.4.0"
   },
   "devDependencies": {},
