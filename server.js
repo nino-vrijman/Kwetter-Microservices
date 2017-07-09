@@ -16,14 +16,14 @@ kweet_app.get('/users/:username', (req, res) => {
     });
 });
 
-const getUserByUsername = (username) => Rx.Observable.fromPromise(new Promise((resolve, reject) => {
+const getUserByUsername = (username) => new Rx.Observable(observer => {
     database.users.findOne({ username: username }, (error, user) => {
         if (error) {
-            resolve(error);
+            observer.next(error);
         }
-        resolve(user);
+        observer.next(user);
     });
-}));
+});
 
 kweet_app.post('/kweets/new', (req, res, next) => {
     const kweet = req.body.body ? req.body.body : req.body;
@@ -33,14 +33,14 @@ kweet_app.post('/kweets/new', (req, res, next) => {
     });
 });
 
-const createKweet = (kweet) => Rx.Observable.fromPromise(new Promise((resolve, reject) => {
+const createKweet = (kweet) => new Rx.Observable(observer => {
     database.kweets.save(kweet, (error, createdKweet) => {
         if (error) {
-            resolve(error);
+            observer.next(error);
         }
-        resolve(createdKweet);
+        observer.next(createdKweet);
     });
-}));
+});
 
 kweet_app.get('/kweets/timeline/:userId/:offset/:amount', (req, res, next) => {
     const userId = req.params.userId;
@@ -58,23 +58,23 @@ kweet_app.get('/kweets/profile/:userId/:offset/:amount', (req, res, next) => {
     });
 });
 
-const getKweets = (userId) => Rx.Observable.fromPromise(new Promise((resolve, reject) => {
+const getKweets = (userId) => new Rx.Observable(observer => {
     database.kweets.find({ creatorId: Number(userId) }, (error, kweets) => {
         if (error) {
-            resolve(error);
+            observer.next(error);
         }
-        resolve(kweets);
+        observer.next(kweets);
     });
-}));
+});
 
-const getFollowingUserIDs = (userId) => Rx.Observable.fromPromise(new Promise((resolve, reject) => {
+const getFollowingUserIDs = (userId) => new Rx.Observable(observer => {
     database.users.findOne({ _id: mongojs.ObjectId(userId) }, (error, user) => {
         if (error) {
-            resolve(error);
+            observer.next(error);
         }
-        resolve(user);
+        observer.next(user);
     });
-}));
+});
 
 kweet_app.listen(8080, () => {
     console.log('Listening on port 8080');
